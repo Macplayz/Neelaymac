@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Preloader from "@/components/preloader";
+import About from "@/components/about";
 
 export default function Home() {
   // State to track if loading is finished
@@ -33,7 +34,7 @@ export default function Home() {
       >
         <Navbar />
         <Hero />
-    
+        <About />
       </div>
     </main>
   );
