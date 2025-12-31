@@ -5,6 +5,7 @@ import Hero from "@/components/Hero";
 import Preloader from "@/components/preloader";
 import About from "@/components/about";
 
+
 export default function Home() {
 
   const [loading, setLoading] = useState(true);

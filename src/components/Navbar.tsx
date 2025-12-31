@@ -1,9 +1,11 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { HiMenuAlt4, HiX } from "react-icons/hi";
 
 export default function Navbar() {
   const [time, setTime] = useState<string>("");
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     const updateTime = () => {
@@ -13,7 +15,7 @@ export default function Navbar() {
         hour12: true,
         hour: "numeric", 
         minute: "2-digit",
-        second: "2-digit"
+        second: "2-digit" // Added seconds here
       }));
     };
     updateTime();
@@ -25,37 +27,57 @@ export default function Navbar() {
     <nav className="fixed top-0 left-0 w-full z-50 border-b border-white/5 bg-[#0a0a0a]/80 backdrop-blur-md">
       <div className="container mx-auto px-6 h-16 relative flex items-center justify-between">
         
-        {/* 1. Left: Logo */}
-        <div className="z-10 flex items-center">
-          <Link href="/" className="font-mono text-xl font-bold tracking-tighter text-white hover:text-[#8b5cf6] transition-colors">
+        {/* Logo */}
+        <div className="z-50">
+          <Link href="/" className="font-mono text-xl font-bold tracking-tighter text-white">
             NM<span className="text-[#8b5cf6]">.</span>
           </Link>
         </div>
 
-        {/* 2. Center: Expanded Navigation */}
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden lg:flex gap-8 font-mono text-xs text-gray-400">
-          <Link href="#about" className="hover:text-white transition-colors tracking-wide hover:underline decoration-[#8b5cf6] underline-offset-4">
-            [ ABOUT ]
-          </Link>
-          <Link href="#qualifications" className="hover:text-white transition-colors tracking-wide hover:underline decoration-[#8b5cf6] underline-offset-4">
-            [ QUALIFICATIONS ]
-          </Link>
-          <Link href="#projects" className="hover:text-white transition-colors tracking-wide hover:underline decoration-[#8b5cf6] underline-offset-4">
-            [ PROJECTS ]
-          </Link>
-          <Link href="#contact" className="hover:text-white transition-colors tracking-wide hover:underline decoration-[#8b5cf6] underline-offset-4">
-            [ CONTACT ]
-          </Link>
+        {/* Desktop Nav */}
+        <div className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 gap-8 font-mono text-xs text-gray-400">
+          {["ABOUT", "QUALIFICATIONS", "PROJECTS", "CONTACT"].map((item) => (
+            <Link 
+              key={item}
+              href={`#${item.toLowerCase()}`} 
+              className="hover:text-white transition-colors tracking-wide hover:underline decoration-[#8b5cf6] underline-offset-4"
+            >
+              [ {item} ]
+            </Link>
+          ))}
         </div>
 
-        {/* 3. Right: Time Data Only (Cleaner) */}
-        <div className="z-10 flex items-center gap-6">
-          <div className="flex items-center gap-3 font-mono text-xs text-gray-400 tabular-nums whitespace-nowrap">
-            <span className="hidden xl:inline text-gray-600 tracking-wider">MUMBAI, IN</span>
-            <span className="text-[#8b5cf6] hidden xl:inline">::</span>
+        {/* Right Side: Time & Hamburger */}
+        <div className="flex items-center gap-4">
+          <div className="hidden sm:flex items-center gap-2 font-mono text-xs text-gray-500 tabular-nums">
+            <span className="hidden xl:inline">MUMBAI</span>
+            <span className="text-[#8b5cf6] hidden xl:inline">:</span>
             <span className="min-w-[85px] text-right text-gray-300">
-              {time || "--:--:--"}
+              {time}
             </span>
+          </div>
+
+          <button 
+            onClick={() => setIsOpen(!isOpen)} 
+            className="md:hidden text-white text-2xl z-50 focus:outline-none"
+          >
+            {isOpen ? <HiX /> : <HiMenuAlt4 />}
+          </button>
+        </div>
+
+        {/* Mobile Menu */}
+        <div className={`fixed inset-0 bg-[#0a0a0a] z-40 flex flex-col justify-center items-center transition-transform duration-300 md:hidden ${isOpen ? "translate-x-0" : "translate-x-full"}`}>
+          <div className="flex flex-col gap-8 text-center font-mono text-xl text-gray-300">
+            {["ABOUT", "QUALIFICATIONS", "PROJECTS", "CONTACT"].map((item) => (
+              <Link 
+                key={item}
+                href={`#${item.toLowerCase()}`}
+                onClick={() => setIsOpen(false)}
+                className="hover:text-[#8b5cf6] transition-colors"
+              >
+                [ {item} ]
+              </Link>
+            ))}
           </div>
         </div>
         
