@@ -2,7 +2,6 @@
 import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { FiLoader } from "react-icons/fi"; 
 
 export default function Hero() {
   const container = useRef(null);
@@ -11,29 +10,36 @@ export default function Hero() {
   useGSAP(() => {
     const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-    // 1. Main Title Staggered Rise
+    // 1. Main Title Animation
     tl.from(".hero-title-line", {
       y: 100,
       opacity: 0,
-      rotateX: -20, // 3D effect
+      rotateX: -20,
       duration: 1.2,
       stagger: 0.15,
       skewY: 5,
       delay: 0.5 
     })
-    // 2. Description & Button Fade Up
+    // 2. Text & Button Animation
     .from(".hero-content", {
       y: 30,
       opacity: 0,
       duration: 1,
       stagger: 0.2
     }, "-=0.8")
-    // 3. Scroll Indicator Bounce
+    // 3. Scroll Indicator
     .from(".hero-scroll", {
       y: 50,
       opacity: 0,
       duration: 1
     }, "-=0.5");
+
+    // 4. Animate Glow separately
+    gsap.from(".hero-glow", {
+      opacity: 0,
+      duration: 2,
+      delay: 1
+    });
 
   }, { scope: container });
 
@@ -58,27 +64,29 @@ export default function Hero() {
             Building digital infrastructure with precision and purpose.
           </p>
 
-          {/* BUTTON: "Download Effect" style but for "Resume Soon" */}
-          <button 
-            onClick={(e) => e.preventDefault()} // No action yet
-            className="hero-content group relative inline-flex items-center justify-center overflow-hidden rounded-sm border border-[#8b5cf6]/50 px-6 py-2.5 md:px-8 md:py-3 font-mono font-medium tracking-wide text-[#8b5cf6] transition-all duration-300 hover:border-[#8b5cf6] hover:text-white hover:shadow-[0_0_20px_rgba(139,92,246,0.5)] cursor-wait"
-          >
-            {/* The Sliding Purple Background Fill */}
-            <span className="absolute inset-0 h-full w-full translate-y-full bg-[#8b5cf6] transition-transform duration-300 ease-out group-hover:translate-y-0"></span>
-            
-            {/* The Text & Loader */}
-            <span className="relative z-10 flex items-center gap-2">
-              <span className="opacity-50 transition-opacity group-hover:opacity-100">[</span>
-              <span className="text-[10px] md:text-xs uppercase tracking-[0.2em]">RESUME_SOON</span>
-              <FiLoader className="h-3 w-3 animate-spin" />
-              <span className="opacity-50 transition-opacity group-hover:opacity-100">]</span>
-            </span>
-          </button>
+          {/* BUTTON (No Spinner) */}
+          <div className="hero-content z-20"> 
+            <button 
+              onClick={(e) => e.preventDefault()} 
+              className="group relative inline-flex items-center justify-center overflow-hidden rounded-sm border border-[#8b5cf6]/50 px-6 py-2.5 md:px-8 md:py-3 font-mono font-medium tracking-wide text-[#8b5cf6] transition-all duration-300 hover:border-[#8b5cf6] hover:text-white hover:shadow-[0_0_20px_rgba(139,92,246,0.5)] cursor-wait"
+            >
+              {/* Sliding Background */}
+              <span className="absolute inset-0 h-full w-full translate-y-full bg-[#8b5cf6] transition-transform duration-300 ease-out group-hover:translate-y-0"></span>
+              
+              {/* Text Only */}
+              <span className="relative z-10 flex items-center gap-2">
+                <span className="opacity-50 transition-opacity group-hover:opacity-100">[</span>
+                <span className="text-[10px] md:text-xs uppercase tracking-[0.2em]">RESUME_SOON</span>
+                <span className="opacity-50 transition-opacity group-hover:opacity-100">]</span>
+              </span>
+            </button>
+          </div>
+
         </div>
       </div>
 
       {/* Glow */}
-      <div className="hero-content absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-[#8b5cf6] opacity-[0.08] blur-[80px] md:blur-[120px] rounded-full pointer-events-none"></div>
+      <div className="hero-glow absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-[#8b5cf6] opacity-[0.08] blur-[80px] md:blur-[120px] rounded-full pointer-events-none"></div>
       
       {/* Scroll Footer */}
       <div className="hero-scroll absolute bottom-6 md:bottom-10 w-full flex justify-center px-4 font-mono text-[9px] md:text-[10px] text-white/50 uppercase tracking-widest">
